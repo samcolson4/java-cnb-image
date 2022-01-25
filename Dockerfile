@@ -7,7 +7,8 @@ ENV DOCKER_CHANNEL=stable \
     PACK_VERSION=0.21.1 \
     GH_VERSION=2.4.0 \
     GOPATH=$HOME/go \
-    PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+    PATH=$PATH:$GOROOT/bin:$GOPATH/bin \
+    LIMA_VERSION=0.8.1
 RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
 RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list
 RUN apt-get update && \
@@ -34,8 +35,7 @@ RUN apt-get update && \
         lsb-release \
         cgroupfs-mount \
         uidmap \
-        libseccomp-dev \
-        podman
+        libseccomp-dev
 RUN go install github.com/paketo-buildpacks/libpak/cmd/create-package@latest
 RUN curl \
         --show-error \
@@ -44,3 +44,4 @@ RUN curl \
     "https://github.com/google/go-containerregistry/releases/download/v${CRANE_VERSION}/go-containerregistry_Linux_x86_64.tar.gz" \
     | tar -C  /usr/local/bin/ -xz crane
 RUN (curl -sSL "https://github.com/buildpacks/pack/releases/download/v${PACK_VERSION}/pack-v${PACK_VERSION}-linux.tgz" | tar -C /usr/local/bin/ --no-same-owner -xzv pack)
+RUN curl -fsSL https://github.com/lima-vm/lima/releases/download/v0.8.1/lima-0.8.1-Linux-x86_64.tar.gz | tar Cxzvm /usr/local
